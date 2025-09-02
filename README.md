@@ -16,3 +16,19 @@ The data is still stored in an array variable (not yet using a database).
 | /players/:id | DELETE | Delete player by id |      |
 | /players/:id | PATCH  | Patch player by id  |      |
 | /players/:id | PUT    | Update player by id |      |
+
+---
+
+To install dependencies:
+
+```sh
+bun install
+```
+
+To run:
+
+```sh
+bun run dev
+```
+
+open http://localhost:3000
