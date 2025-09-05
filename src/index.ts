@@ -1,28 +1,18 @@
 import { Hono } from "hono";
+import { players } from "./data/players";
 
 const app = new Hono();
-
-type Players = {
-  id: number;
-  name: string;
-};
-
-const players: Players[] = [
-  { id: 1, name: "Luka Modrić" },
-  { id: 2, name: "Kylian Mbappé" },
-  { id: 3, name: "Cristiano Ronaldo" },
-  { id: 4, name: "Vinícius Júnior" },
-  { id: 5, name: "Erling Haaland" },
-];
 
 app.get("/", (c) => {
   return c.text("Hello Hono!");
 });
 
+//GET /players
 app.get("/players", (c) => {
   return c.json(players);
 });
 
+//GET /players/:id
 app.get("/players/:id", (c) => {
   const id = Number(c.req.param("id"));
 
