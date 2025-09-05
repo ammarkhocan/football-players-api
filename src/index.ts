@@ -47,4 +47,27 @@ app.post("/players", async (c) => {
   return c.json({ message: "player added", newPlayer }, 200);
 });
 
+// DELETE /players
+app.delete("/players", (c) => {
+  players.splice(0, players.length);
+  return c.json({ message: "All players deleted" });
+});
+
+// DELETE /player/:id
+app.delete("/players/:id", (c) => {
+  const id = c.req.param("id");
+
+  const foundPlayer = players.find((player) => player.id === Number(id));
+
+  if (!foundPlayer) {
+    return c.json({ message: "Player not found" }, 404);
+  }
+
+  const newPlayers = players.filter((p) => p.id !== Number(id));
+
+  players.splice(0, players.length, ...newPlayers);
+
+  return c.json({ message: "Player deleted", deletedPlayer: foundPlayer });
+});
+
 export default app;
