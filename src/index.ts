@@ -27,4 +27,24 @@ app.get("/players/:id", (c) => {
   return c.json(player);
 });
 
+//POST /players
+app.post("/players", async (c) => {
+  const body = await c.req.json();
+
+  const foundPlayer = players.find((player) => player.name.toLowerCase() === body.name.toLowerCase());
+
+  if (foundPlayer) {
+    return c.json({ message: "Player already exists" }, 409);
+  }
+
+  const newPlayer = {
+    id: players.length ? players[players.length - 1].id + 1 : 1,
+    ...body,
+  };
+
+  players.push(newPlayer);
+
+  return c.json({ message: "player added", newPlayer }, 200);
+});
+
 export default app;
