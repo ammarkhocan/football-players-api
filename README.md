@@ -14,7 +14,7 @@ The data is still stored in an array variable (not yet using a database).
 | /players     | POST   | Add new player      | ✅   |
 | /players     | DELETE | Delete all players  | ✅   |
 | /players/:id | DELETE | Delete player by id | ✅   |
-| /players/:id | PATCH  | Patch player by id  |      |
+| /players/:id | PATCH  | Patch player by id  | ✅   |
 | /players/:id | PUT    | Update player by id |      |
 
 ---
