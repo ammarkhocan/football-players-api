@@ -19,6 +19,13 @@ The data is still stored in an array variable (not yet using a database).
 
 ---
 
+## 📌 Database Design
+
+The database is designed using **dbdiagram.io**.  
+View the schema here: [Database Design](https://dbdiagram.io/d/desain-db-players-football-68bfc52361a46d388e1c331e)
+
+---
+
 To install dependencies:
 
 ```sh
