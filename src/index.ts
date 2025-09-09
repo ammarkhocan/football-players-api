@@ -70,4 +70,26 @@ app.delete("/players/:id", (c) => {
   return c.json({ message: "Player deleted", deletedPlayer: foundPlayer });
 });
 
+// PATCH players
+app.patch("/players/:id", async (c) => {
+  const id = Number(c.req.param("id"));
+  const body = await c.req.json();
+
+  const playerIndex = players.findIndex((player) => player.id === id);
+
+  if (playerIndex === -1) {
+    return c.json({ message: "Player not found" }, 404);
+  }
+
+  players[playerIndex] = {
+    ...players[playerIndex],
+    ...body,
+  };
+
+  return c.json({
+    message: "Player updated",
+    updatedPlayer: players[playerIndex],
+  });
+});
+
 export default app;
