@@ -1,4 +1,4 @@
-type Players = {
+type Player = {
   id: number;
   name: string;
   club: string;
@@ -7,7 +7,7 @@ type Players = {
   number: number;
 };
 
-export const players: Players[] = [
+export const players: Player[] = [
   {
     id: 1,
     name: "Luka Modrić",
