@@ -4,7 +4,7 @@ import { players } from "./data/players";
 const app = new Hono();
 
 app.get("/", (c) => {
-  return c.text("Hello Hono!");
+  return c.text("Player Football API ⚽");
 });
 
 //GET /players
@@ -70,7 +70,7 @@ app.delete("/players/:id", (c) => {
   return c.json({ message: "Player deleted", deletedPlayer: foundPlayer });
 });
 
-// PATCH players
+// PATCH players/:id
 app.patch("/players/:id", async (c) => {
   const id = Number(c.req.param("id"));
   const body = await c.req.json();
