@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { players } from "./data/players";
+import { db } from "./lib/db";
 
 const app = new Hono();
 
@@ -8,43 +9,36 @@ app.get("/", (c) => {
 });
 
 //GET /players
-app.get("/players", (c) => {
+app.get("/players", async (c) => {
+  const players = await db.player.findMany();
   return c.json(players);
 });
 
 //GET /players/:id
-app.get("/players/:id", (c) => {
+app.get("/players/:id", async (c) => {
   const id = Number(c.req.param("id"));
 
-  const player = players.find((player) => {
-    return player.id === id;
-  });
+  const playerById = await db.player.findUnique({ where: { id } });
+  if (!playerById) return c.notFound();
 
-  if (!player) {
-    return c.json({ message: "Player not found" }, 404);
-  }
-
-  return c.json(player);
+  return c.json(playerById);
 });
 
 //POST /players
 app.post("/players", async (c) => {
   const body = await c.req.json();
 
-  const foundPlayer = players.find((player) => player.name.toLowerCase() === body.name.toLowerCase());
+  const newPlayer = await db.player.create({
+    data: {
+      name: body.name,
+      club: body.club,
+      position: body.position,
+      nationality: body.nationality,
+      number: body.number,
+    },
+  });
 
-  if (foundPlayer) {
-    return c.json({ message: "Player already exists" }, 409);
-  }
-
-  const newPlayer = {
-    id: players.length ? players[players.length - 1].id + 1 : 1,
-    ...body,
-  };
-
-  players.push(newPlayer);
-
-  return c.json({ message: "player added", newPlayer }, 200);
+  return c.json(newPlayer, 201);
 });
 
 // DELETE /players
