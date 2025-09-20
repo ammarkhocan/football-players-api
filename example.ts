@@ -1,21 +1,31 @@
-import * as pg from "pg";
+import { PrismaClient } from "./src/generated/prisma";
 
-const client = new pg.Client({
-  connectionString: process.env.DATABASE_URL,
-});
-await client.connect();
+const prisma = new PrismaClient();
 
-type Players = {
-  id: number;
-  name: string;
-};
+async function main() {
+  const newPlayer = await prisma.player.create({
+    data: {
+      name: "Kylian Mbappé",
+      club: "Real Madrid",
+      position: "Forward",
+      nationality: "France",
+      number: 9,
+    },
+  });
 
-try {
-  const result = await client.query("SELECT * FROM players");
-  const players: Players[] = result.rows;
+  console.log({ newPlayer });
+
+  const players = await prisma.player.findMany();
+
   console.log({ players });
-} catch (error) {
-  console.error("Failed to connect to the database", error);
-} finally {
-  await client.end();
 }
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
