@@ -42,48 +42,38 @@ app.post("/players", async (c) => {
 });
 
 // DELETE /players
-app.delete("/players", (c) => {
-  players.splice(0, players.length);
-  return c.json({ message: "All players deleted" });
+app.delete("/players", async (c) => {
+  const deleted = await db.player.deleteMany();
+  return c.json({ message: "All players deleted", count: deleted.count });
 });
 
 // DELETE /player/:id
-app.delete("/players/:id", (c) => {
-  const id = c.req.param("id");
+app.delete("/players/:id", async (c) => {
+  const id = Number(c.req.param("id"));
 
-  const foundPlayer = players.find((player) => player.id === Number(id));
+  const player = await db.player.delete({
+    where: { id },
+  });
 
-  if (!foundPlayer) {
-    return c.json({ message: "Player not found" }, 404);
-  }
-
-  const newPlayers = players.filter((p) => p.id !== Number(id));
-
-  players.splice(0, players.length, ...newPlayers);
-
-  return c.json({ message: "Player deleted", deletedPlayer: foundPlayer });
+  return c.json(player);
 });
 
 // PATCH players/:id
 app.patch("/players/:id", async (c) => {
   const id = Number(c.req.param("id"));
-  const body = await c.req.json();
+  const bodyJson = await c.req.json();
 
-  const playerIndex = players.findIndex((player) => player.id === id);
-
-  if (playerIndex === -1) {
-    return c.json({ message: "Player not found" }, 404);
-  }
-
-  players[playerIndex] = {
-    ...players[playerIndex],
-    ...body,
-  };
-
-  return c.json({
-    message: "Player updated",
-    updatedPlayer: players[playerIndex],
+  const player = await db.player.update({
+    where: { id },
+    data: {
+      name: bodyJson.name,
+      club: bodyJson.club,
+      position: bodyJson.position,
+      nationality: bodyJson.nationality,
+      number: bodyJson.number,
+    },
   });
+  return c.json({ player });
 });
 
 export default app;
