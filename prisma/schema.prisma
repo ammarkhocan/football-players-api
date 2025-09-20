@@ -14,27 +14,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Player {
   id Int @id @default(autoincrement())
 
-  name String
-  club String
-  position String
+  name        String
+  position    String
   nationality String
-  number Int
+  number      Int
+
+  club   Club? @relation(fields: [clubId], references: [id])
+  clubId Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-
-model Club{
+model Club {
   id Int @id @default(autoincrement())
 
-  name String
+  name    String
   country String
-  
+
+  players Player[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
