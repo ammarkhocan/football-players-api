@@ -76,4 +76,66 @@ app.patch("/players/:id", async (c) => {
   return c.json({ player });
 });
 
+//GET /club
+app.get("/clubs", async (c) => {
+  const clubs = await db.club.findMany();
+  return c.json(clubs);
+});
+
+//GET /clubs/:id
+app.get("/clubs/:id", async (c) => {
+  const id = Number(c.req.param("id"));
+
+  const clubById = await db.club.findUnique({ where: { id } });
+  if (!clubById) return c.notFound();
+
+  return c.json(clubById);
+});
+
+//POST /clubs
+app.post("/clubs", async (c) => {
+  const body = await c.req.json();
+
+  const newClub = await db.club.create({
+    data: {
+      name: body.name,
+      country: body.name,
+    },
+  });
+
+  return c.json(newClub, 201);
+});
+
+// PATCH clubs/:id
+app.patch("/clubs/:id", async (c) => {
+  const id = Number(c.req.param("id"));
+  const bodyJson = await c.req.json();
+
+  const club = await db.club.update({
+    where: { id },
+    data: {
+      name: bodyJson.name,
+      country: bodyJson.country,
+    },
+  });
+  return c.json({ club });
+});
+
+// DELETE /clubs
+app.delete("/club", async (c) => {
+  const deleted = await db.club.deleteMany();
+  return c.json({ message: "All players deleted", count: deleted.count });
+});
+
+// DELETE /club/:id
+app.delete("/club/:id", async (c) => {
+  const id = Number(c.req.param("id"));
+
+  const club = await db.club.delete({
+    where: { id },
+  });
+
+  return c.json(club);
+});
+
 export default app;
