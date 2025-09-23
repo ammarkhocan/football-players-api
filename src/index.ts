@@ -121,7 +121,7 @@ app.patch("/players/:id", async (c) => {
       number: bodyJson.number,
     },
   });
-  return c.json({ player });
+  return c.json(player);
 });
 
 //GET /club
