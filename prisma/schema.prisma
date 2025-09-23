@@ -22,10 +22,10 @@ model Player {
   clubId      Int?
   nationality String
 
+  club Club? @relation(fields: [clubId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  club Club? @relation(fields: [clubId], references: [id])
 }
 
 model Club {
