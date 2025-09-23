@@ -10,8 +10,17 @@ app.get("/", (c) => {
 
 //GET /players
 app.get("/players", async (c) => {
-  const players = await db.player.findMany();
-  return c.json(players);
+  try {
+    const players = await db.player.findMany({
+      include: {
+        club: true,
+      },
+    });
+    return c.json(players);
+  } catch (error) {
+    console.error("Error fetching players:", error);
+    return c.json({ error: "Internal server error" }, 500);
+  }
 });
 
 //GET /players/:id
@@ -99,7 +108,7 @@ app.post("/clubs", async (c) => {
   const newClub = await db.club.create({
     data: {
       name: body.name,
-      country: body.name,
+      country: body.country,
     },
   });
 
