@@ -166,7 +166,7 @@ app.patch("/clubs/:id", async (c) => {
       country: bodyJson.country,
     },
   });
-  return c.json({ club });
+  return c.json(club);
 });
 
 // DELETE /clubs
