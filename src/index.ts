@@ -25,29 +25,68 @@ app.get("/players", async (c) => {
 
 //GET /players/:id
 app.get("/players/:id", async (c) => {
-  const id = Number(c.req.param("id"));
+  try {
+    const id = Number(c.req.param("id"));
 
-  const playerById = await db.player.findUnique({ where: { id } });
-  if (!playerById) return c.notFound();
+    const player = await db.player.findUnique({
+      where: { id },
+      include: {
+        club: true,
+      },
+    });
 
-  return c.json(playerById);
+    if (!player) {
+      return c.json({ error: "Player not found" }, 404);
+    }
+
+    return c.json(player);
+  } catch (error) {
+    console.error("Error fetching player:", error);
+    return c.json({ error: "Internal server error" }, 500);
+  }
 });
 
 //POST /players
 app.post("/players", async (c) => {
-  const body = await c.req.json();
+  try {
+    const body = await c.req.json();
 
-  const newPlayer = await db.player.create({
-    data: {
-      name: body.name,
-      club: body.club,
-      position: body.position,
-      nationality: body.nationality,
-      number: body.number,
-    },
-  });
+    if (!body.name || !body.position || !body.nationality || !body.number) {
+      return c.json(
+        {
+          error: "Missing required fields: name, position, nationality, number",
+        },
+        400
+      );
+    }
 
-  return c.json(newPlayer, 201);
+    if (body.clubId) {
+      const clubExists = await db.club.findUnique({
+        where: { id: Number(body.clubId) },
+      });
+      if (!clubExists) {
+        return c.json({ error: "Club not found" }, 400);
+      }
+    }
+
+    const newPlayer = await db.player.create({
+      data: {
+        name: body.name,
+        position: body.position,
+        nationality: body.nationality,
+        number: Number(body.number),
+        clubId: body.clubId ? Number(body.clubId) : null,
+      },
+      include: {
+        club: true,
+      },
+    });
+
+    return c.json(newPlayer, 201);
+  } catch (error) {
+    console.error("Error creating player:", error);
+    return c.json({ error: "Internal server error" }, 500);
+  }
 });
 
 // DELETE /players
