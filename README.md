@@ -1,7 +1,9 @@
 # ⚽ Football Players API
 
-A simple API to manage football player information. Built using Bun with the Hono framework.
-The data is still stored in an array variable (not yet using a database).
+A simple API to manage football player and club information.  
+Built using **Bun** with the **Hono** framework, and data is stored in a **database** for persistence.
+
+🚀 **Live Demo**: [Football Players API on Railway](https://football-players.up.railway.app/)
 
 ---
 
@@ -14,8 +16,13 @@ The data is still stored in an array variable (not yet using a database).
 | /players     | POST   | Add new player      | ✅   |
 | /players     | DELETE | Delete all players  | ✅   |
 | /players/:id | DELETE | Delete player by id | ✅   |
-| /players/:id | PATCH  | Patch player by id  | ✅   |
-| /players/:id | PUT    | Update player by id |      |
+| /players/:id | PATCH  | Edit player by id   | ✅   |
+| /clubs       | GET    | Get all Clubs       | ✅   |
+| /clubs/:id   | GET    | Get Clubs by id     | ✅   |
+| /clubs       | POST   | Add new Clubs       | ✅   |
+| /clubs       | DELETE | DELETE all clubs    | ✅   |
+| /clubs/:id   | DELETE | Delete club by id   | ✅   |
+| /clubs/:id   | PATCH  | Edit club by id     | ✅   |
 
 ---
 
