@@ -43,21 +43,21 @@ playersRoute.get("/:id", async (c) => {
 });
 
 // GET /players/:id
-playersRoute.get("/:id", async (c) => {
-  try {
-    const id = Number(c.req.param("id"));
-    const player = await db.player.findUnique({
-      where: { id },
-      include: { club: true },
-    });
+// playersRoute.get("/:id", async (c) => {
+//   try {
+//     const id = Number(c.req.param("id"));
+//     const player = await db.player.findUnique({
+//       where: { id },
+//       include: { club: true },
+//     });
 
-    if (!player) return c.json({ error: "Player not found" }, 404);
-    return c.json(player);
-  } catch (error) {
-    console.error("Error fetching player:", error);
-    return c.json({ error: "Internal server error" }, 500);
-  }
-});
+//     if (!player) return c.json({ error: "Player not found" }, 404);
+//     return c.json(player);
+//   } catch (error) {
+//     console.error("Error fetching player:", error);
+//     return c.json({ error: "Internal server error" }, 500);
+//   }
+// });
 
 // POST /players
 playersRoute.post("/", async (c) => {

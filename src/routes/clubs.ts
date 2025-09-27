@@ -21,16 +21,21 @@ clubsRoute.get("/:id", async (c) => {
 
 // POST /clubs
 clubsRoute.post("/", async (c) => {
-  const body = await c.req.json();
+  try {
+    const body = await c.req.json();
 
-  const newClub = await db.club.create({
-    data: {
-      name: body.name,
-      country: body.country,
-    },
-  });
+    const newClub = await db.club.create({
+      data: {
+        name: body.name,
+        country: body.country,
+      },
+    });
 
-  return c.json(newClub, 201);
+    return c.json(newClub, 201);
+  } catch (error) {
+    console.error(error);
+    return c.json({ error: "Failed to create club" }, 400);
+  }
 });
 
 // PATCH /clubs/:id
